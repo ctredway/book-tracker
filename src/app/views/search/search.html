@@ -1,0 +1,20 @@
+<app-search-box label="Search books" placeholder="Title or author"
+  (search)="onSearch($event)" />
+
+@if (results.isLoading()) {
+  <p>Searching…</p>
+} @else if (results.error()) {
+  <p role="alert">Something went wrong. Please try again.</p>
+} @else if (results.hasValue()) {
+  <p>{{ results.value().total }} results for "{{ searchTerm() }}"</p>
+  <ul>
+    @for (book of results.value().books; track book.id) {
+      <li>
+        <a [routerLink]="['/book', book.id]">{{ book.title }}</a>
+        @if (book.authors.length) { by {{ book.authors.join(', ') }} }
+      </li>
+    } @empty {
+      <li>No books found.</li>
+    }
+  </ul>
+}
